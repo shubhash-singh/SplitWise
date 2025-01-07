@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.ragnar.splitwise.R;
@@ -33,7 +34,7 @@ public class GroupsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
         EditText groupNameInput = view.findViewById(R.id.group_name_input);
-        Button addGroupButton = view.findViewById(R.id.add_group_button);
+        TextView addGroupButton = view.findViewById(R.id.add_group_button);
         RecyclerView groupsRecyclerView = view.findViewById(R.id.groups_recycler_view);
         db = FirebaseFirestore.getInstance();
 
@@ -45,6 +46,7 @@ public class GroupsFragment extends Fragment {
         // Add group button click listener
         addGroupButton.setOnClickListener(v -> {
             String groupName = groupNameInput.getText().toString().trim();
+            groupNameInput.setText("");
             if (!groupName.isEmpty()) {
                 addGroup(groupName);
             } else {
@@ -73,6 +75,7 @@ public class GroupsFragment extends Fragment {
                 .set(group)
                 .addOnSuccessListener(aVoid -> {
                     groupList.add(group);
+                    updateUserGroups(userId, groupId);
                     groupAdapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), "Group added", Toast.LENGTH_SHORT).show();
                 })
@@ -91,5 +94,13 @@ public class GroupsFragment extends Fragment {
                     groupAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to fetch groups", Toast.LENGTH_SHORT).show());
+    }
+    private void updateUserGroups(String userId, String groupId) {
+        db.collection("users").document(userId)
+                .update("groupIds", FieldValue.arrayUnion(groupId))
+                .addOnSuccessListener(aVoid ->
+                        Toast.makeText(getContext(), "User's group list updated", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Failed to update user's group list", Toast.LENGTH_SHORT).show());
     }
 }

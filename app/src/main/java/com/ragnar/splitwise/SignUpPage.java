@@ -37,13 +37,11 @@ public class SignUpPage extends AppCompatActivity {
         // Setting the status bar to black
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.background_color));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
 
         // initialize the Database
         InitializeDatabase db = new InitializeDatabase();
         SessionManager session = new SessionManager(getApplicationContext());
-
-
 
         emailEditText = findViewById(R.id.editTextEmail);
         passwordEditText = findViewById(R.id.editTextPassword);

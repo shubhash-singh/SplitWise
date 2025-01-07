@@ -9,6 +9,7 @@
         android:id="@+id/member_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Member Name"
+        android:text="@string/member_name"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 </LinearLayout>

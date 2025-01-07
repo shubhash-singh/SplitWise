@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ragnar.splitwise.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberViewHolder> {
 
     private List<String> members;
-
     public MembersAdapter(List<String> members) {
         this.members = members;
     }
+
 
     @NonNull
     @Override
@@ -30,8 +31,11 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
 
     @Override
     public void onBindViewHolder(@NonNull MemberViewHolder holder, int position) {
-        holder.memberNameTextView.setText(members.get(position));
+        // Ensure the member name is fetched from userNamesList
+        String memberName = members.get(position); // Get name from userNamesList
+        holder.memberNameTextView.setText((position + 1) + ". " + memberName); // Display user name
     }
+
 
     @Override
     public int getItemCount() {

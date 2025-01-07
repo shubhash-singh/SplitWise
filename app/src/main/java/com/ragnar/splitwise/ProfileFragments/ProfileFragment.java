@@ -1,4 +1,4 @@
-package com.ragnar.splitwise.Fragments;
+package com.ragnar.splitwise.ProfileFragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,12 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ragnar.splitwise.Callbacks.Callback;
+import  com.ragnar.splitwise.Callbacks.Callback;
 import com.ragnar.splitwise.Database.ProfileDatabaseHandler;
 import com.ragnar.splitwise.Database.SessionManager;
 import com.ragnar.splitwise.LoginPage;
 import com.ragnar.splitwise.MainActivity;
 import com.ragnar.splitwise.R;
+
+
+
 
 
 public class ProfileFragment extends Fragment {
@@ -46,9 +49,11 @@ public class ProfileFragment extends Fragment {
         resetPasswordButton = view.findViewById(R.id.passwordSettingButton);
         logoutButton = view.findViewById(R.id.logoutButton);
 
+        resetPasswordButton.setOnClickListener(v -> resetPassword());
+        logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
+
         setProfileDetail();
-        resetPasswordButton.setOnClickListener(item -> resetPassword());
-        logoutButton.setOnClickListener(item -> showLogoutConfirmationDialog());
+
         return view;
     }
 

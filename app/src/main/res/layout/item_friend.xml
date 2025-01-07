@@ -15,31 +15,31 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/group_name_text"
+            android:id="@+id/friendTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/group_name"
+            android:text="@string/friends"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:padding="4dp"
             app:drawableEndCompat="@drawable/ic_next_arrow" />
         <TextView
-            android:id="@+id/member_count_text"
+            android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Member Count"
+            android:text="@string/email"
             android:textSize="16sp"
             android:textColor="#001926"
             android:padding="4dp"
             tools:ignore="HardcodedText" />
         <TextView
-            android:id="@+id/amount_to_be_paid_text"
+            android:id="@+id/phoneNumberEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="00"
+            android:text="@string/phone_number"
             android:textSize="16sp"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="#001926"
             android:padding="4dp"
             tools:ignore="HardcodedText" />
     </LinearLayout>

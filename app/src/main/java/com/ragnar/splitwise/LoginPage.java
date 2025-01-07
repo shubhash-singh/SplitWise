@@ -28,7 +28,7 @@ public class LoginPage extends AppCompatActivity {
         // Setting the status bar to black
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.background_color));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
 
 
 

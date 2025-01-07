@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ragnar.splitwise.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
@@ -35,11 +36,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groupList.get(position);
         holder.groupNameTextView.setText(group.getName());
-        // Set the amount to be paid below group name if it's available
+        // Format amountToBePaid to 2 decimal places
+        DecimalFormat df = new DecimalFormat("#.00");
         String amountToBePaid = group.getAmountToBePaid() != null ?
-                "Amount to be paid: " + group.getAmountToBePaid() : "";
+                "Amount to be paid: " + df.format(group.getAmountToBePaid()) : "Amount to be paid: 0.00";
         holder.amountToBePaidTextView.setText(amountToBePaid);
 
+        // Display the member count
+        String memberCount = "Member Count: " + group.getMembers().size();
+        holder.membercountTextView.setText(memberCount);
         // Handle group click to show group details
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, GroupDetailActivity.class);
@@ -55,12 +60,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
-        TextView groupNameTextView, amountToBePaidTextView;
+        TextView groupNameTextView, amountToBePaidTextView, membercountTextView;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             groupNameTextView = itemView.findViewById(R.id.group_name_text);
             amountToBePaidTextView = itemView.findViewById(R.id.amount_to_be_paid_text);
+            membercountTextView = itemView.findViewById(R.id.member_count_text);
         }
     }
 }

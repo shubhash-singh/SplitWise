@@ -44,10 +44,6 @@
                 android:textColor="@color/black"
                 android:textColorHint="#000000" />
 
-
-
-
-
             <EditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"

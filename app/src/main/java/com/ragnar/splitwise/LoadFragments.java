@@ -1,5 +1,6 @@
 package com.ragnar.splitwise;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -14,14 +15,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.ragnar.splitwise.Fragments.FriendsFragment;
+import com.ragnar.splitwise.FriendFragment.FriendsFragment;
 import com.ragnar.splitwise.GroupFragment.GroupsFragment;
-import com.ragnar.splitwise.Fragments.ProfileFragment;
+import com.ragnar.splitwise.ProfileFragments.ProfileFragment;
+
+import org.w3c.dom.Text;
 
 public class LoadFragments extends AppCompatActivity {
     ImageButton addFriendButton;
 
     BottomNavigationView nav_bar;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,57 +34,34 @@ public class LoadFragments extends AppCompatActivity {
         // Setting the status bar to black
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(this,R.color.background_color));
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
 
-        addFriendButton = findViewById(R.id.addFriendButton);
+
         nav_bar = findViewById(R.id.bottom_navigation);
-
+        TextView fragmentNameTextView = findViewById(R.id.fragmentName);
+        fragmentNameTextView.setText("Groups");
+        loadFragment(new GroupsFragment());
         nav_bar.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if(id == R.id.nav_groups){
                 loadFragment(new GroupsFragment());
+                fragmentNameTextView.setText("Groups");
             }
             else if(id == R.id.nav_friends){
-                loadFragment(new FriendsFragment());
+                loadFragment(new com.ragnar.splitwise.FriendFragment.FriendsFragment());
+                fragmentNameTextView.setText("Friends");
             }
             else if (id == R.id.nav_profile) {
                 loadFragment(new ProfileFragment());
+                fragmentNameTextView.setText("Profile");
             }
             return true;
         });
 
-        String selectedItem = String.valueOf(nav_bar.getSelectedItemId());
     }
 
-    private void setAddFriendDialog(){
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        dialog.setContentView(R.layout.dialog_add_friend);
-        EditText phoneNumberEditText = dialog.findViewById(R.id.phoneNumberEditText);
-        TextView addButton = dialog.findViewById(R.id.addButton);
-
-        // Set the dialog width to be wider
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
-        addButton.setOnClickListener(v -> {
-            String phoneNumber = phoneNumberEditText.getText().toString().trim();
-            if (!phoneNumber.isEmpty()) {
-
-
-
-
-                dialog.dismiss();
-            } else {
-                phoneNumberEditText.setError("Phone number cannot be empty!");
-            }
-        });
-        dialog.show();
-    }
 
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
