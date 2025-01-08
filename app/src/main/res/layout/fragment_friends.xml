@@ -6,20 +6,25 @@
     android:background="@color/background_color">
 
     <EditText
-        android:id="@+id/friendPhoneNumberEditText"
+        android:id="@+id/friendNameEditText"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:padding="10dp"
         android:background="@drawable/bg_custom_input"
         android:autofillHints=""
         android:layout_margin="16dp"
-        android:hint="@string/phone_number"
+        android:hint="@string/name"
         android:textColorHint="#4E4E4E"
-        android:inputType="phone"
+        android:inputType="text"
         android:textColor="@color/black"/>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userSearchRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
     <TextView
-        android:id="@+id/add_group_button"
+        android:id="@+id/addFriendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="15dp"

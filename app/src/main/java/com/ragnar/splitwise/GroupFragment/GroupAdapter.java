@@ -18,10 +18,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     private List<Group> groupList;
     private Context context;
+    private OnGroupLongPressListener longPressListener;
 
-    public GroupAdapter(List<Group> groupList, Context context) {
+    // Constructor with the callback listener
+    public GroupAdapter(List<Group> groupList, Context context, OnGroupLongPressListener longPressListener) {
         this.groupList = groupList;
         this.context = context;
+        this.longPressListener = longPressListener;
     }
 
     @NonNull
@@ -36,6 +39,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groupList.get(position);
         holder.groupNameTextView.setText(group.getName());
+
         // Format amountToBePaid to 2 decimal places
         DecimalFormat df = new DecimalFormat("#.00");
         String amountToBePaid = group.getAmountToBePaid() != null ?
@@ -45,12 +49,21 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         // Display the member count
         String memberCount = "Member Count: " + group.getMembers().size();
         holder.membercountTextView.setText(memberCount);
+
         // Handle group click to show group details
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, GroupDetailActivity.class);
             intent.putExtra("group_id", group.getId());
             intent.putExtra("group_name", group.getName());
             context.startActivity(intent);
+        });
+
+        // Handle long press to show options for update or delete
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longPressListener != null) {
+                longPressListener.onGroupLongPressed(group, position);
+            }
+            return true;
         });
     }
 
@@ -68,5 +81,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             amountToBePaidTextView = itemView.findViewById(R.id.amount_to_be_paid_text);
             membercountTextView = itemView.findViewById(R.id.member_count_text);
         }
+    }
+
+    // Interface for long press actions
+    public interface OnGroupLongPressListener {
+        void onGroupLongPressed(Group group, int position);
     }
 }

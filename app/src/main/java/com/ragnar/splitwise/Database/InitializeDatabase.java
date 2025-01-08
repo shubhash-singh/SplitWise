@@ -12,8 +12,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.ragnar.splitwise.Callbacks.Callback;
 import com.ragnar.splitwise.Callbacks.SignUpCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class InitializeDatabase {
 
@@ -65,6 +67,8 @@ public class InitializeDatabase {
                             userData.put("email", email);
                             userData.put("phone", phoneNumber);
                             userData.put("gender", gender);
+
+
 
                             // Save user data to Firestore with UID as document ID
                             db = FirebaseFirestore.getInstance();

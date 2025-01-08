@@ -118,7 +118,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         userList = new ArrayList<>();
         userAdapter = new UserAdapter(userList, clickedUser -> {
             // Set clicked user's name to EditText
-            addMemberInput.setText(clickedUser.getPhoneNumber());
+            addMemberInput.setText(clickedUser.getName());
             userSearchRecycleView.setVisibility(View.GONE);
         });
 
@@ -226,9 +226,9 @@ public class GroupDetailActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         userList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String phone = document.getString("phone");
-                            if (phone != null) {
-                                userList.add(new User(phone));
+                            String name = document.getString("name");
+                            if (name != null) {
+                                userList.add(new User(name));
                             }
                         }
                     } else {
