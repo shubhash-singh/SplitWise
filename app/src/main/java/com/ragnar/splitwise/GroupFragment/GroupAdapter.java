@@ -39,13 +39,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groupList.get(position);
         holder.groupNameTextView.setText(group.getName());
-
-        // Format amountToBePaid to 2 decimal places
-        DecimalFormat df = new DecimalFormat("#.00");
-        String amountToBePaid = group.getAmountToBePaid() != null ?
-                "Amount to be paid: " + df.format(group.getAmountToBePaid()) : "Amount to be paid: 0.00";
-        holder.amountToBePaidTextView.setText(amountToBePaid);
-
         // Display the member count
         String memberCount = "Member Count: " + group.getMembers().size();
         holder.membercountTextView.setText(memberCount);

@@ -79,31 +79,12 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         // Add member button logic
         addMemberButton.setOnClickListener(v -> {
-            String newMemberPhone = addMemberInput.getText().toString().trim();
+            String newMemberName = addMemberInput.getText().toString().trim();
             addMemberInput.setText("");
-            if (!newMemberPhone.isEmpty()) {
-                // Search for the user by phone number in the "users" collection
-                db.collection("users")
-                        .whereEqualTo("phone", newMemberPhone)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                if (task.getResult().isEmpty()) {
-                                    Toast.makeText(GroupDetailActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Assuming there is only one user with the given phone number
-                                    DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                                    String userId = documentSnapshot.getId();  // This is the user's ID
-
-                                    // Now add the user to the group by updating the group members
-                                    addMember(userId);
-                                }
-                            } else {
-                                Toast.makeText(GroupDetailActivity.this, "Failed to fetch user", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+            if (!newMemberName.isEmpty()) {
+                fetchUserIDFromName(newMemberName);
             } else {
-                Toast.makeText(GroupDetailActivity.this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GroupDetailActivity.this, "Invalid Input !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -121,6 +102,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(userList, clickedUser -> {
             // Set clicked user's name to EditText
             addMemberInput.setText(clickedUser.getName());
+//            Log.e("Setting USerName", clickedUser.getName());
             userSearchRecycleView.setVisibility(View.GONE);
         });
 
@@ -171,6 +153,27 @@ public class GroupDetailActivity extends AppCompatActivity {
                 });
     }
 
+    private void fetchUserIDFromName(String userName){
+        db.collection("users")
+                .whereEqualTo("name", userName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            Toast.makeText(GroupDetailActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Assuming there is only one user with the given phone number
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            String userId = documentSnapshot.getId();  // This is the user's ID
+
+                            // Now add the user to the group by updating the group members
+                            addMember(userId);
+                        }
+                    } else {
+                        Toast.makeText(GroupDetailActivity.this, "Failed to fetch user", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
     private void fetchMemberNames(List<String> userIds) {
         membersList.clear();
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
@@ -247,7 +250,7 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         List<User> filteredList = new ArrayList<>();
         for (User user : userList) {
-            if (user.getPhoneNumber().toLowerCase().contains(query.toLowerCase())) {
+            if (user.getName().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(user);
             }
         }
@@ -394,6 +397,4 @@ public class GroupDetailActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to fetch group details", Toast.LENGTH_SHORT).show();
                 });
     }
-
-
 }

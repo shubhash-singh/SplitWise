@@ -33,7 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
         holder.nameTextView.setText(user.getPhoneNumber());
-        holder.nameTextView.setTextColor(android.graphics.Color.BLACK); // Set text color to black
+        holder.nameTextView.setTextColor(android.graphics.Color.BLACK);
 
         // Handle item click
         holder.itemView.setOnClickListener(v -> clickListener.onUserClick(user));

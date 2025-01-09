@@ -6,8 +6,8 @@ public class User {
     // Empty constructor for Firestore
     public User() {}
 
-    public User(String phoneNumber) {
-        this.phoneNumber =  phoneNumber;
+    public User(String name) {
+        this.name =  name;
     }
 
     public String getName() {

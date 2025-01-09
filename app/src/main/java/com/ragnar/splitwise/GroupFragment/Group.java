@@ -8,20 +8,20 @@ public class Group {
     private String id;
     private String name;
     private List<String> members;
-    private Double totalAmount;  // Total amount for the group
     private Double amountToBePaid;  // Amount to be paid by each member
+    private List<String> balances;
 
     // Constructors, getters, and setters
     public Group() {
         // Default constructor required for Firestore
     }
 
-    public Group(String id, String name, List<String> members, Double totalAmount, Double amountToBePaid) {
+    public Group(String id, String name, List<String> members, Double amountToBePaid, List<String> balances) {
         this.id = id;
         this.name = name;
         this.members = members;
-        this.totalAmount = totalAmount;
         this.amountToBePaid = amountToBePaid;
+        this.balances = balances;
     }
 
     public String getId() {
@@ -48,19 +48,17 @@ public class Group {
         this.members = members;
     }
 
-    public Double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
     public Double getAmountToBePaid() {
         return amountToBePaid;
     }
 
     public void setAmountToBePaid(Double amountToBePaid) {
         this.amountToBePaid = amountToBePaid;
+    }
+    public List<String> getBalances() {
+        return balances;
+    }
+    public void setBalances(List<String> balances) {
+        this.balances = balances;
     }
 }

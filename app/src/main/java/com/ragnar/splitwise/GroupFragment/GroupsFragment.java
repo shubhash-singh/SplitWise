@@ -68,13 +68,12 @@ public class GroupsFragment extends Fragment {
     private void addGroup(String groupName) {
         String groupId = db.collection("groups").document().getId();
         List<String> members = new ArrayList<>();
-
+        List<String> balances = new ArrayList<>();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         members.add(userId);
         // Default values for totalAmount and amountToBePaid
-        Double totalAmount = 0.0;  // Set total amount to 0 initially
-        Double amountToBePaid = 0.0;  // Set amount to be paid by each member to 0 initially
-        Group group = new Group(groupId, groupName, members, totalAmount, amountToBePaid);
+        Double amountToBePaid = 0.0;  // Set amount to be paid  0 initially
+        Group group = new Group(groupId, groupName, members, amountToBePaid, balances);
 
         db.collection("groups").document(groupId)
                 .set(group)
