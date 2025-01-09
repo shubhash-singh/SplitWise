@@ -48,4 +48,8 @@
     <string name="delete_group">Delete Group</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
+    <string name="amount">Amount</string>
+    <string name="receiver_name">Receiver Name</string>
+    <string name="payer_name">Payer Name</string>
+    <string name="settle">Settle</string>
 </resources>

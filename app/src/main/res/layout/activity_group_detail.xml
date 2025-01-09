@@ -112,6 +112,21 @@
         android:focusable="true"
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_button_signup"/>
+    <TextView
+        android:id="@+id/settle_up_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button_signup"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Settle Up"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="70dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/members_recycler_view"
         android:layout_width="match_parent"

@@ -32,7 +32,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String groupId;
     private TextView amountToBePaidTextView, amountPerPersonTextView;
-    private List<String> membersList, userIds;
+    private List<String> membersList;
     private EditText addMemberInput, billAmountInput;
     private MembersAdapter membersAdapter;
     private RecyclerView userSearchRecycleView;
@@ -68,9 +68,11 @@ public class GroupDetailActivity extends AppCompatActivity {
         billAmountInput = findViewById(R.id.bill_amount_input);
         amountPerPersonTextView = findViewById(R.id.amount_per_person);
 
+        TextView settleUpButton = findViewById(R.id.settle_up_button);
+        settleUpButton.setOnClickListener(v -> showSettleUpDialog());
+
         groupNameTextView.setText(groupName);
         membersList = new ArrayList<>();
-        userIds = new ArrayList<>();
         membersAdapter = new MembersAdapter(membersList);
         membersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         membersRecyclerView.setAdapter(membersAdapter);
@@ -306,7 +308,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             if (members != null) {
                                 int memberCount = members.size();
                                 double amountPerPersonDouble = totalAmount / memberCount;
-                                String amountPerPersonString = "Bill per person: " + String.format("%.2f", amountPerPersonDouble);;
+                                String amountPerPersonString = "Bill per person: " + String.format("%.2f", amountPerPersonDouble);
                                 amountPerPersonTextView.setText(amountPerPersonString);
                             }
                         }
@@ -326,5 +328,72 @@ public class GroupDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Log.d("UserList", "User list updated"))
                 .addOnFailureListener(e ->Log.e("UserGroupList", "Failed to update user's group list"));
     }
+
+    private void showSettleUpDialog() {
+        // Create a dialog
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_settle_up, null);
+        builder.setView(dialogView);
+
+        EditText payerInput = dialogView.findViewById(R.id.payer_input);
+        EditText receiverInput = dialogView.findViewById(R.id.receiver_input);
+        EditText amountInput = dialogView.findViewById(R.id.amount_input);
+        TextView settleButton = dialogView.findViewById(R.id.settle_button);
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Settle button logic
+        settleButton.setOnClickListener(v -> {
+            String payer = payerInput.getText().toString().trim();
+            String receiver = receiverInput.getText().toString().trim();
+            String amountText = amountInput.getText().toString().trim();
+
+            if (!payer.isEmpty() && !receiver.isEmpty() && !amountText.isEmpty()) {
+                double amount = Double.parseDouble(amountText);
+                recordPayment(payer, receiver, amount);
+                dialog.dismiss();
+            } else {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void recordPayment(String payer, String receiver, double amount) {
+        // Fetch the group's current balances
+        db.collection("groups").document(groupId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Group group = documentSnapshot.toObject(Group.class);
+                        if (group != null) {
+                            List<String> members = group.getMembers();
+
+                            if (members.contains(payer) && members.contains(receiver)) {
+                                // Update balances in Firestore
+                                String key = payer + "_to_" + receiver; // Key format: "payer_to_receiver"
+
+                                db.collection("groups").document(groupId)
+                                        .update(key, FieldValue.increment(-amount))
+                                        .addOnSuccessListener(aVoid -> {
+                                            fetchGroupDetails(); // Update UI
+                                            Toast.makeText(this, "Payment recorded successfully", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("SettleUp", "Error updating balances", e);
+                                            Toast.makeText(this, "Failed to record payment", Toast.LENGTH_SHORT).show();
+                                        });
+
+                            } else {
+                                Toast.makeText(this, "Payer or Receiver not in group", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("SettleUp", "Error fetching group details", e);
+                    Toast.makeText(this, "Failed to fetch group details", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
 }
